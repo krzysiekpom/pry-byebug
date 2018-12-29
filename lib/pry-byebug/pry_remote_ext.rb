@@ -1,10 +1,8 @@
-require "pry-remote"
-
 module PryRemote
   #
   # Overrides PryRemote::Server
   #
-  class Server
+  module ServerExt
     #
     # Override the call to Pry.start to save off current Server, and not
     # teardown the server right after Pry.start finishes.
@@ -15,22 +13,24 @@ module PryRemote
 
       PryByebug.current_remote_server = self
 
+      puts "[pry-remote] Waiting for client on #{uri}"
+      @client.wait
+
       setup
-      Pry.start @object, input: client.input_proxy, output: client.output
+      Pry.start @object, input: client.input_proxy, output: client.output, steps_out: 5
     end
 
-    #
-    # Override to reset our saved global current server session.
-    #
-    alias teardown_without_pry_byebug teardown
-    def teardown_with_pry_byebug
+    def teardown
       return if @torn
 
-      teardown_without_pry_byebug
+      super
       PryByebug.current_remote_server = nil
       @torn = true
     end
-    alias teardown teardown_with_pry_byebug
+  end
+
+  class Server
+    prepend ServerExt
   end
 end
 

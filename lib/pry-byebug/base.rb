@@ -3,7 +3,13 @@
 #
 module PryByebug
   # Reference to currently running pry-remote server. Used by the processor.
-  attr_accessor :current_remote_server
+  def self.current_remote_server
+    @current_remote_server
+  end
+
+  def self.current_remote_server=(current_remote_server)
+    @current_remote_server = current_remote_server
+  end
 
   module_function
 

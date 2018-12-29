@@ -15,7 +15,7 @@ module Byebug
       Byebug.start
       Setting[:autolist] = false
       Context.processor = self
-      Byebug.current_context.step_out(4, true)
+      Byebug.current_context.step_out(yield || 4, true)
     end
 
     #
