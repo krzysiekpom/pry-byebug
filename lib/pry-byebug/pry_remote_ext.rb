@@ -14,7 +14,7 @@ module PryRemote
       PryByebug.current_remote_server = self
 
       puts "[pry-remote] Waiting for client on #{uri}"
-      @client.wait
+      client.wait
 
       setup
       Pry.start @object, input: client.input_proxy, output: client.output, steps_out: 5

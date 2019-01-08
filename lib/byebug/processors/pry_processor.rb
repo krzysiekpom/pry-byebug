@@ -11,11 +11,11 @@ module Byebug
     def_delegators :@pry, :output
     def_delegators Pry::Helpers::Text, :bold
 
-    def self.start
+    def self.start(options = {})
       Byebug.start
       Setting[:autolist] = false
       Context.processor = self
-      Byebug.current_context.step_out(yield || 4, true)
+      Byebug.current_context.step_out(options[:steps_out] || 4, true)
     end
 
     #
